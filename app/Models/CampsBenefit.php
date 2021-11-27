@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CampsBenefit extends Model
 {
     protected $fillable = [
+        'camps_id',
         'name',
     ];
 }
