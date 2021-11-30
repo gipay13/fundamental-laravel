@@ -19,7 +19,7 @@ class User extends Authenticatable
         'email_verified_at',
         'password',
         'image',
-        'ocupation',
+        'occupation',
         'is_admin'
     ];
 
