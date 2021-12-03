@@ -23,8 +23,13 @@ class CheckoutsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Camps $camps)
+    public function create(Request $request, Camps $camps)
     {
+        if ($camps->isRegisteredOnCamp) {
+            $request->session()->flash('error', "You Already Registered on $camps->bootcamps_name camp.");
+            return redirect(route('dashboard'));
+        }
+
         $data = [
             'camps' => $camps,
         ];
@@ -40,19 +45,30 @@ class CheckoutsController extends Controller
      */
     public function store(Request $request, Camps $camps)
     {
-        $store = $request->all();
-        $store['users_id'] = Auth::id();
-        $store['camps_id'] = $camps->id;
+        //jika ingin lebih komples gunakan php artisan make:request
+        //kemuadian ganti Request menjadi File yg dibuat misakan Store $request
+        $request->validate([
+            'name'          => 'required|string',
+            'email'         => 'required|email|unique:users,email,'.Auth::id().',id',
+            'occupation'    => 'required|string',
+            'card_number'   => 'required|numeric|digits_between:8,16',
+            'expired'       => 'required|date|date_format:Y-m|after_or_equal:'.date('Y-m', time()),
+            'cvc'           => 'required|numeric|digits:3'
+        ]);
+        return $request->all();
+        // $store = $request->all();
+        // $store['users_id'] = Auth::id();
+        // $store['camps_id'] = $camps->id;
 
-        $user = Auth::user();
-        $user->email = $store['email'];
-        $user->name = $store['name'];
-        $user->occupation = $store['occupation'];
-        $user->save();
+        // $user = Auth::user();
+        // $user->email = $store['email'];
+        // $user->name = $store['name'];
+        // $user->occupation = $store['occupation'];
+        // $user->save();
 
-        $checkout = Checkouts::create($store);
+        // $checkout = Checkouts::create($store);
 
-        return redirect(route('checkout.success'));
+        // return redirect(route('checkout.success'));
     }
 
     /**
