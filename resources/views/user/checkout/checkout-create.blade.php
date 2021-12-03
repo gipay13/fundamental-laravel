@@ -22,7 +22,7 @@
                         <div class="item-bootcamp">
                             <img src="/assets/images/item_bootcamp.png" alt="" class="cover">
                             <h1 class="package text-uppercase">
-                                {{ $camps->bootcamps_name }}
+                                {{ $camp->bootcamp_name }}
                             </h1>
                             <p class="description">
                                 Bootcamp ini akan mengajak Anda untuk belajar penuh mulai dari pengenalan dasar sampai
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-lg-1 col-12"></div>
                     <div class="col-lg-6 col-12">
-                        <form action="{{ route('checkout.store', $camps->id) }}" class="basic-form" method="POST">
+                        <form action="{{ route('checkout.store', $camp->id) }}" class="basic-form" method="POST">
                             @csrf
                             <div class="mb-4">
                                 <label for="name" class="form-label">Full Name</label>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-lg-6 col-12">
                                         <label for="cvc" class="form-label">CVC</label>
-                                        <input name="cvc" type="text" class="form-control @error('card_number') is-invalid @enderror" id="cvc" value="{{ old('expired') }}" required>
+                                        <input name="cvc" type="text" class="form-control @error('card_number') is-invalid @enderror" id="cvc" value="{{ old('cvc') }}" required>
                                         @error('cvc')
                                         <small class="text-danger">{{ $message }}</small>
                                         @enderror

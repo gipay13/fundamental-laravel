@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Checkouts extends Model
+class Checkout extends Model
 {
     protected $fillable = [
-        'users_id',
-        'camps_id',
+        'user_id',
+        'camp_id',
         'card_number',
         'expired',
         'cvc',
@@ -23,9 +23,19 @@ class Checkouts extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function camps(): BelongsTo
+    public function camp(): BelongsTo
     {
-        return $this->belongsTo(Camps::class);
+        return $this->belongsTo(Camp::class);
+    }
+
+    /**
+     * Get the user that owns the Checkout
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function setExpiredAttribute($value)

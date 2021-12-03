@@ -15,7 +15,7 @@ class CreateCampsTable extends Migration
     {
         Schema::create('camps', function (Blueprint $table) {
             $table->id();
-            $table->string('bootcamps_name', 100);
+            $table->string('bootcamp_name', 100);
             $table->string('slug', 100);
             $table->integer('price')->unsigned();
             $table->timestamps();

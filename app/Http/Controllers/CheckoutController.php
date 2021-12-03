@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Camps;
-use App\Models\Checkouts;
+use App\Mail\User\AfterCheckout;
+use App\Models\Camp;
+use App\Models\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
-class CheckoutsController extends Controller
+class CheckoutController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,15 +25,15 @@ class CheckoutsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, Camps $camps)
+    public function create(Request $request, Camp $camp)
     {
-        if ($camps->isRegisteredOnCamp) {
-            $request->session()->flash('error', "You Already Registered on $camps->bootcamps_name camp.");
+        if ($camp->isRegisteredOnCamp) {
+            $request->session()->flash('error', "You Already Registered on $camp->bootcamp_name camp.");
             return redirect(route('dashboard'));
         }
 
         $data = [
-            'camps' => $camps,
+            'camp' => $camp,
         ];
 
         return view('user.checkout.checkout-create', $data);
@@ -43,7 +45,7 @@ class CheckoutsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Camps $camps)
+    public function store(Request $request, Camp $camp)
     {
         //jika ingin lebih komples gunakan php artisan make:request
         //kemuadian ganti Request menjadi File yg dibuat misakan Store $request
@@ -55,20 +57,22 @@ class CheckoutsController extends Controller
             'expired'       => 'required|date|date_format:Y-m|after_or_equal:'.date('Y-m', time()),
             'cvc'           => 'required|numeric|digits:3'
         ]);
-        return $request->all();
-        // $store = $request->all();
-        // $store['users_id'] = Auth::id();
-        // $store['camps_id'] = $camps->id;
 
-        // $user = Auth::user();
-        // $user->email = $store['email'];
-        // $user->name = $store['name'];
-        // $user->occupation = $store['occupation'];
-        // $user->save();
+        $store = $request->all();
+        $store['user_id'] = Auth::id();
+        $store['camp_id'] = $camp->id;
 
-        // $checkout = Checkouts::create($store);
+        $user = Auth::user();
+        $user->email = $store['email'];
+        $user->name = $store['name'];
+        $user->occupation = $store['occupation'];
+        $user->save();
 
-        // return redirect(route('checkout.success'));
+        $checkout = Checkout::create($store);
+
+        Mail::to(Auth::user()->email)->send(new AfterCheckout($checkout));
+
+        return redirect(route('checkout.success'));
     }
 
     /**
@@ -119,5 +123,10 @@ class CheckoutsController extends Controller
     public function success()
     {
         return view('user.checkout.checkout-success');
+    }
+
+    public function invoice(Checkout $checkout)
+    {
+        return $checkout;
     }
 }

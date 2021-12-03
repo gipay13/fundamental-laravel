@@ -25,11 +25,11 @@
                             <img src="/assets/images/item_bootcamp.png" height="120" alt="">
                         </td>
                         <td>
-                            <p class="mb-2"><strong>{{ $c->camps->bootcamps_name }}</strong></p>
+                            <p class="mb-2"><strong>{{ $c->camp->bootcamp_name }}</strong></p>
                             <p>{{ $c->created_at->format('M-d, Y') }}</p>
                         </td>
                         <td>
-                            <strong>{{ $c->camps->price }}</strong>
+                            <strong>{{ $c->camp->price }}</strong>
                         </td>
                         <td>
                             @if ($c->is_paid)

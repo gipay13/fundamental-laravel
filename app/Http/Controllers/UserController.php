@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\User\AfterRegister;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
@@ -30,7 +32,13 @@ class UserController extends Controller
             'email_verified_at'  => date('Y-m-d H:i:s', time()),
         ];
 
-        $user = User::firstOrCreate(['email' => $data['email']], $data);
+        // $user = User::firstOrCreate(['email' => $data['email']], $data);
+        $user = User::whereEmail($data['email'])->first();
+
+        if(!$user) {
+            $store_user = User::create($data);
+            Mail::to($store_user->email)->send(new AfterRegister($store_user));
+        }
         Auth::login($user, true);
 
         return redirect(route('home'));

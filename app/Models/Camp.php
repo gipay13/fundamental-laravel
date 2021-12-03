@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
-class Camps extends Model
+class Camp extends Model
 {
     protected $fillable = [
         'bootcamps_name',
@@ -22,6 +22,6 @@ class Camps extends Model
         }
 
         //melakukan cek apakah di db ada camp dengan user dimaksud
-        return Checkouts::whereCampsId($this->id)->whereUsersId(Auth::id())->exists();
+        return Checkout::whereCampId($this->id)->whereUserId(Auth::id())->exists();
     }
 }

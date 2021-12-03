@@ -13,13 +13,13 @@ class CreateCampsBenefitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('camps_benefits', function (Blueprint $table) {
+        Schema::create('camp_benefits', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('camps_id')->unsigned();
+            $table->bigInteger('camp_id')->unsigned();
             $table->string('name', 150);
             $table->timestamps();
 
-            $table->foreign('camps_id')->references('id')->on('camps')->onDelete('cascade');
+            $table->foreign('camp_id')->references('id')->on('camps')->onDelete('cascade');
         });
     }
 
