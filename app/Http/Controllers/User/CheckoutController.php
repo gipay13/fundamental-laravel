@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Mail\User\AfterCheckout;
 use App\Models\Camp;
 use App\Models\Checkout;
@@ -29,7 +30,7 @@ class CheckoutController extends Controller
     {
         if ($camp->isRegisteredOnCamp) {
             $request->session()->flash('error', "You Already Registered on $camp->bootcamp_name camp.");
-            return redirect(route('dashboard'));
+            return redirect(route('user.dashboard'));
         }
 
         $data = [
