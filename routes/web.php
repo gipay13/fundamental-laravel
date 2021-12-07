@@ -31,7 +31,6 @@ Route::middleware('auth')->group(function () {
         Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success')->middleware('ensure.user.role:user');
         Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store');
         Route::get('checkout/{camp:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
-        Route::get('dashboard/checkout/invoice/{checkout}', [CheckoutController::class, 'invoice'])->name('checkout.invoice');
     });
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
