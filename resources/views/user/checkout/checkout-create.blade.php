@@ -56,29 +56,18 @@
                                 @enderror
                             </div>
                             <div class="mb-4">
-                                <label for="card_number" class="form-label">Card Number</label>
-                                <input name="card_number" type="number" class="form-control @error('card_number') is-invalid @enderror" id="card_number" value="{{ old('card_number') ?: '' }}" required>
-                                @error('card_number')
+                                <label for="phone" class="form-label">Phone</label>
+                                <input name="phone" type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone') ?: Auth::user()->phone }}" required>
+                                @error('phone')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <div class="mb-5">
-                                <div class="row">
-                                    <div class="col-lg-6 col-12">
-                                        <label for="expired" class="form-label">Expired</label>
-                                        <input name="expired" type="month" class="form-control @error('card_number') is-invalid @enderror" id="expired" value="{{ old('expired') }}" required>
-                                        @error('expired')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                    <div class="col-lg-6 col-12">
-                                        <label for="cvc" class="form-label">CVC</label>
-                                        <input name="cvc" type="text" class="form-control @error('card_number') is-invalid @enderror" id="cvc" value="{{ old('cvc') }}" required>
-                                        @error('cvc')
-                                        <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
+                            <div class="mb-4">
+                                <label for="address" class="form-label">Address</label>
+                                <input name="address" type="text" class="form-control @error('address') is-invalid @enderror" id="address" value="{{ old('address') ?: Auth::user()->address }}" required>
+                                @error('address')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <button type="submit" class="w-100 btn btn-primary">Pay Now</button>
                             <p class="text-center subheader mt-4">
