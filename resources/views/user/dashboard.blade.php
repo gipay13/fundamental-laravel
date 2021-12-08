@@ -32,14 +32,12 @@
                             <strong>{{ $c->camp->price }}</strong>
                         </td>
                         <td>
-                            @if ($c->is_paid)
-                            <strong class="text-success">Payment Success</strong>
-                            @else
-                            <strong class="text-warning">Waiting for Payment</strong>
-                            @endif
+                            <strong class="text-success">{{ $c->payment_status }}</strong>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-primary">Get Invoice</a>
+                            @if ($c->payment_status == 'waiting')
+                                <a href="{{ $c->midtrans_url }}" class="btn btn-primary">Pay Here</a>
+                            @endif
                         </td>
                     </tr>
                     @empty

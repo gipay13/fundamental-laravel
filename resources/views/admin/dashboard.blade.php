@@ -31,21 +31,7 @@
                                         <td>{{ $c->camp->bootcamp_name }}</td>
                                         <td>{{ $c->camp->price }}</td>
                                         <td>{{ $c->created_at->format('M d y') }}</td>
-                                        <td>
-                                            @if ($c->is_paid)
-                                                <span class="badge bg-success">Paid</span>
-                                            @else
-                                                <span class="badge bg-warning">Waiting</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if (!$c->is_paid)
-                                            <form action="{{ route('admin.checkout.update', $c->id) }}" method="post">
-                                                @csrf
-                                                <button class="btn btn-primary btn-sm">Set Paid</button>
-                                            </form>
-                                            @endif
-                                        </td>
+                                        <td><strong>{{ $c->payment_status }}</strong></td>
                                     </tr>
                                 @empty
                                     <tr>
