@@ -49,7 +49,7 @@ class CheckoutController extends Controller
             'name'          => 'required|string',
             'email'         => 'required|email|unique:users,email,'.Auth::id().',id',
             'occupation'    => 'required|string',
-            'phone'         => 'required|number',
+            'phone'         => 'required|string',
             'address'       => 'required|string',
 
         ]);
@@ -62,6 +62,8 @@ class CheckoutController extends Controller
         $user->email = $store['email'];
         $user->name = $store['name'];
         $user->occupation = $store['occupation'];
+        $user->phone = $store['phone'];
+        $user->address = $store['address'];
         $user->save();
 
         $checkout = Checkout::create($store);
@@ -96,7 +98,7 @@ class CheckoutController extends Controller
             'id'        => $checkout->id,
             'price'     => $checkout->camp->price * 1000,
             'quantity'  => 1,
-            'name'      => 'Payment for { $checkout->camp->bootcamp_name }',
+            'name'      => 'Payment for '.$checkout->camp->bootcamp_name,
         ];
 
         $user_data = [
@@ -137,12 +139,12 @@ class CheckoutController extends Controller
 
     public function midtransCallback(Request $request)
     {
-        $notif = new Midtrans\Notification();
+        $notif = $request->method() == 'POST' ? new Midtrans\Notification() : Midtrans\Transaction::status($request->order_id);
 
         $transaction_status = $notif->transaction_status;
         $fraud = $notif->fraud_status;
 
-        $checkout_id =  explode('-', $notif->order_id);
+        $checkout_id =  explode('-', $notif->order_id)[0];
         $checkout = Checkout::find($checkout_id);
 
         if($transaction_status == 'capture') {
@@ -151,7 +153,7 @@ class CheckoutController extends Controller
             } else if($fraud == 'accept') {
                 $checkout->payment_status = 'paid';
             }
-        } elseif ($transaction_status == 'cancel') {
+        } else if ($transaction_status == 'cancel') {
             if($fraud == 'challenge') {
                 $checkout->payment_status = 'failed';
             } else if($fraud == 'accept') {

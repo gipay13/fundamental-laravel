@@ -21,7 +21,7 @@ class UserController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function handle_google_provider_callback()
+    public function handleGoogleProviderCallback()
     {
         $callback = Socialite::driver('google')->stateless()->user();
 
@@ -36,8 +36,8 @@ class UserController extends Controller
         $user = User::whereEmail($data['email'])->first();
 
         if(!$user) {
-            $store_user = User::create($data);
-            Mail::to($store_user->email)->send(new AfterRegister($store_user));
+            $user = User::create($data);
+            Mail::to($user->email)->send(new AfterRegister($user));
         }
         Auth::login($user, true);
 

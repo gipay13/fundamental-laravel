@@ -24,15 +24,16 @@ Route::get('/', function () {
 
 Route::get('login', [UserController::class, 'index'])->name('login');
 Route::get('sign-in-google', [UserController::class, 'google_signin'])->name('google.login.user');
-Route::get('auth/google/callback', [UserController::class, 'handle_google_provider_callback'])->name('google.user.callback');
+Route::get('auth/google/callback', [UserController::class, 'handleGoogleProviderCallback'])->name('google.user.callback');
+
+Route::get('payment/success', [CheckoutController::class, 'midtransCallback']);
+Route::post('payment/success', [CheckoutController::class, 'midtransCallback']);
 
 Route::middleware('auth')->group(function () {
     Route::middleware(['ensure.user.role:user'])->group(function () {
-        Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success')->middleware('ensure.user.role:user');
+        Route::get('checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
         Route::post('checkout/{camp}', [CheckoutController::class, 'store'])->name('checkout.store');
         Route::get('checkout/{camp:slug}', [CheckoutController::class, 'create'])->name('checkout.create');
-        Route::get('payment/success', [UserController::class, 'midtransCallback']);
-        Route::post('payment/success', [UserController::class, 'midtransCallback']);
     });
 
     Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
